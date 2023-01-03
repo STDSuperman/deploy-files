@@ -1,0 +1,6 @@
+name: 'Deploy Files'
+description: 'Deploy Files'
+author: 'STDSuperman'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
