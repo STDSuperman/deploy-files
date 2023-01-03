@@ -1,11 +1,11 @@
 on: [push]
 
 jobs:
-  Deploy Test Job:
+  DeployTest:
     runs-on: ubuntu-latest
-    name: Test Job
+    name: TestJob
     steps:
-      - name: Test Step
+      - name: TestStep
         id: Test
         uses: STDSuperman/deploy-files@v1.0
       # Use the output from the `hello` step
