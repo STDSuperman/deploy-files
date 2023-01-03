@@ -1,0 +1,13 @@
+on: [push]
+
+jobs:
+  Deploy Test Job:
+    runs-on: ubuntu-latest
+    name: Test Job
+    steps:
+      - name: Test Step
+        id: Test
+        uses: STDSuperman/deploy-files@v1.0
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
