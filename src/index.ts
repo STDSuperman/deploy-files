@@ -1,21 +1,52 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
+import { ScpClient } from './lib/scp-client';
 
-async function run(): Promise<void> {
+export async function run(): Promise<boolean> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const host: string = core.getInput('host')
+    const username: string = core.getInput('user')
+    const password: string = core.getInput('password')
+    const sourcePath: string = core.getInput('sourcePath')
+    const targetPath: string = core.getInput('targetPath')
+
+    console.log('***test', {
+      host,
+      port: 22,
+      username,
+      password,
+    })
+
+    const scpClient = new ScpClient({
+      host,
+      port: 22,
+      username,
+      password,
+    })
 
     core.debug(new Date().toTimeString())
 
-    core.debug('Will print file tree')
+    core.debug('print file tree')
 
-    exec.exec('ls');
+    await exec.exec('ls');
 
-    core.setOutput('time', new Date().toTimeString())
+    core.debug('start upload files...')
+
+    await scpClient.waitForReady();
+    await scpClient.uploadDirectory(sourcePath, targetPath)
+
+    core.debug('upload success!')
+
+    await scpClient.close();
+
+    return true;
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) {
+      console.error(error)
+      core.setFailed(error.message)
+    }
   }
+  return false;
 }
 
 run()
