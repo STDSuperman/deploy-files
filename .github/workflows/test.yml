@@ -9,7 +9,7 @@ jobs:
       
       - name: TestStep
         id: Test
-        uses: STDSuperman/deploy-files@v1.0
+        uses: STDSuperman/deploy-files@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           user: ${{ secrets.SERVER_USER }}
