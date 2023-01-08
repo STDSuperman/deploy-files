@@ -17,3 +17,6 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           targetPath: '/home/test-dir'
           sourcePath: './dist'
+          commands: |
+            ls
+            pwd
