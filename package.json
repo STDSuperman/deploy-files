@@ -8,7 +8,8 @@
     "lint:fix": "eslint --fix src",
     "style:fix": "prettier --write src",
     "build": "tsx scripts/build.ts",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "@typescript-eslint/parser": "^5.48.0",
     "esbuild": "^0.16.13",
     "eslint": "^8.31.0",
+    "husky": "^8.0.3",
     "prettier": "^2.8.1",
     "tsx": "^3.12.1",
     "typescript": "^4.9.4",
