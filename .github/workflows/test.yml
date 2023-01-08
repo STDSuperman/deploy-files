@@ -10,6 +10,10 @@ jobs:
       - name: TestStep
         id: Test
         uses: STDSuperman/deploy-files@v1.0
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          user: ${{ secrets.SERVER_USER }}
+          port: '22'
+          password: ${{ secrets.SERVER_PASSWORD }}
+          targetPath: '/home/test-dir'
+          sourcePath: './dist'
