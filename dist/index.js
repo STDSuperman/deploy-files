@@ -706,7 +706,7 @@ var require_tunnel = __commonJS({
         connectOptions.headers = connectOptions.headers || {};
         connectOptions.headers["Proxy-Authorization"] = "Basic " + new Buffer(connectOptions.proxyAuth).toString("base64");
       }
-      debug2("making CONNECT request");
+      debug("making CONNECT request");
       var connectReq = self2.request(connectOptions);
       connectReq.useChunkedEncodingByDefault = false;
       connectReq.once("response", onResponse);
@@ -726,7 +726,7 @@ var require_tunnel = __commonJS({
         connectReq.removeAllListeners();
         socket.removeAllListeners();
         if (res.statusCode !== 200) {
-          debug2(
+          debug(
             "tunneling socket could not be established, statusCode=%d",
             res.statusCode
           );
@@ -738,7 +738,7 @@ var require_tunnel = __commonJS({
           return;
         }
         if (head.length > 0) {
-          debug2("got illegal response body from proxy");
+          debug("got illegal response body from proxy");
           socket.destroy();
           var error = new Error("got illegal response body from proxy");
           error.code = "ECONNRESET";
@@ -746,13 +746,13 @@ var require_tunnel = __commonJS({
           self2.removeSocket(placeholder);
           return;
         }
-        debug2("tunneling connection has established");
+        debug("tunneling connection has established");
         self2.sockets[self2.sockets.indexOf(placeholder)] = socket;
         return cb(socket);
       }
       function onError(cause) {
         connectReq.removeAllListeners();
-        debug2(
+        debug(
           "tunneling socket could not be established, cause=%s\n",
           cause.message,
           cause.stack
@@ -814,9 +814,9 @@ var require_tunnel = __commonJS({
       }
       return target;
     }
-    var debug2;
+    var debug;
     if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-      debug2 = function() {
+      debug = function() {
         var args = Array.prototype.slice.call(arguments);
         if (typeof args[0] === "string") {
           args[0] = "TUNNEL: " + args[0];
@@ -826,10 +826,10 @@ var require_tunnel = __commonJS({
         console.error.apply(console, args);
       };
     } else {
-      debug2 = function() {
+      debug = function() {
       };
     }
-    exports.debug = debug2;
+    exports.debug = debug;
   }
 });
 
@@ -1951,10 +1951,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       return process.env["RUNNER_DEBUG"] === "1";
     }
     exports.isDebug = isDebug;
-    function debug2(message) {
+    function debug(message) {
       command_1.issueCommand("debug", {}, message);
     }
-    exports.debug = debug2;
+    exports.debug = debug;
     function error(message, properties = {}) {
       command_1.issueCommand("error", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
@@ -11860,10 +11860,10 @@ var require_kex = __commonJS({
       let clientList;
       let serverList;
       let i;
-      const debug2 = self2._debug;
-      debug2 && debug2("Inbound: Handshake in progress");
-      debug2 && debug2(`Handshake: (local) KEX method: ${localKex}`);
-      debug2 && debug2(`Handshake: (remote) KEX method: ${remote.kex}`);
+      const debug = self2._debug;
+      debug && debug("Inbound: Handshake in progress");
+      debug && debug(`Handshake: (local) KEX method: ${localKex}`);
+      debug && debug(`Handshake: (remote) KEX method: ${remote.kex}`);
       if (self2._server) {
         serverList = localKex;
         clientList = remote.kex;
@@ -11874,7 +11874,7 @@ var require_kex = __commonJS({
       for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
         ;
       if (i === clientList.length) {
-        debug2 && debug2("Handshake: No matching key exchange algorithm");
+        debug && debug("Handshake: No matching key exchange algorithm");
         return doFatalError(
           self2,
           "Handshake failed: no matching key exchange algorithm",
@@ -11883,13 +11883,13 @@ var require_kex = __commonJS({
         );
       }
       init.kex = clientList[i];
-      debug2 && debug2(`Handshake: KEX algorithm: ${clientList[i]}`);
+      debug && debug(`Handshake: KEX algorithm: ${clientList[i]}`);
       if (firstFollows && (!remote.kex.length || clientList[i] !== remote.kex[0])) {
         self2._skipNextInboundPacket = true;
       }
       const localSrvHostKey = local.lists.serverHostKey.array;
-      debug2 && debug2(`Handshake: (local) Host key format: ${localSrvHostKey}`);
-      debug2 && debug2(
+      debug && debug(`Handshake: (local) Host key format: ${localSrvHostKey}`);
+      debug && debug(
         `Handshake: (remote) Host key format: ${remote.serverHostKey}`
       );
       if (self2._server) {
@@ -11902,7 +11902,7 @@ var require_kex = __commonJS({
       for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
         ;
       if (i === clientList.length) {
-        debug2 && debug2("Handshake: No matching host key format");
+        debug && debug("Handshake: No matching host key format");
         return doFatalError(
           self2,
           "Handshake failed: no matching host key format",
@@ -11911,10 +11911,10 @@ var require_kex = __commonJS({
         );
       }
       init.serverHostKey = clientList[i];
-      debug2 && debug2(`Handshake: Host key format: ${clientList[i]}`);
+      debug && debug(`Handshake: Host key format: ${clientList[i]}`);
       const localCSCipher = local.lists.cs.cipher.array;
-      debug2 && debug2(`Handshake: (local) C->S cipher: ${localCSCipher}`);
-      debug2 && debug2(`Handshake: (remote) C->S cipher: ${remote.cs.cipher}`);
+      debug && debug(`Handshake: (local) C->S cipher: ${localCSCipher}`);
+      debug && debug(`Handshake: (remote) C->S cipher: ${remote.cs.cipher}`);
       if (self2._server) {
         serverList = localCSCipher;
         clientList = remote.cs.cipher;
@@ -11925,7 +11925,7 @@ var require_kex = __commonJS({
       for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
         ;
       if (i === clientList.length) {
-        debug2 && debug2("Handshake: No matching C->S cipher");
+        debug && debug("Handshake: No matching C->S cipher");
         return doFatalError(
           self2,
           "Handshake failed: no matching C->S cipher",
@@ -11934,10 +11934,10 @@ var require_kex = __commonJS({
         );
       }
       init.cs.cipher = clientList[i];
-      debug2 && debug2(`Handshake: C->S Cipher: ${clientList[i]}`);
+      debug && debug(`Handshake: C->S Cipher: ${clientList[i]}`);
       const localSCCipher = local.lists.sc.cipher.array;
-      debug2 && debug2(`Handshake: (local) S->C cipher: ${localSCCipher}`);
-      debug2 && debug2(`Handshake: (remote) S->C cipher: ${remote.sc.cipher}`);
+      debug && debug(`Handshake: (local) S->C cipher: ${localSCCipher}`);
+      debug && debug(`Handshake: (remote) S->C cipher: ${remote.sc.cipher}`);
       if (self2._server) {
         serverList = localSCCipher;
         clientList = remote.sc.cipher;
@@ -11948,7 +11948,7 @@ var require_kex = __commonJS({
       for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
         ;
       if (i === clientList.length) {
-        debug2 && debug2("Handshake: No matching S->C cipher");
+        debug && debug("Handshake: No matching S->C cipher");
         return doFatalError(
           self2,
           "Handshake failed: no matching S->C cipher",
@@ -11957,13 +11957,13 @@ var require_kex = __commonJS({
         );
       }
       init.sc.cipher = clientList[i];
-      debug2 && debug2(`Handshake: S->C cipher: ${clientList[i]}`);
+      debug && debug(`Handshake: S->C cipher: ${clientList[i]}`);
       const localCSMAC = local.lists.cs.mac.array;
-      debug2 && debug2(`Handshake: (local) C->S MAC: ${localCSMAC}`);
-      debug2 && debug2(`Handshake: (remote) C->S MAC: ${remote.cs.mac}`);
+      debug && debug(`Handshake: (local) C->S MAC: ${localCSMAC}`);
+      debug && debug(`Handshake: (remote) C->S MAC: ${remote.cs.mac}`);
       if (CIPHER_INFO[init.cs.cipher].authLen > 0) {
         init.cs.mac = "";
-        debug2 && debug2("Handshake: C->S MAC: <implicit>");
+        debug && debug("Handshake: C->S MAC: <implicit>");
       } else {
         if (self2._server) {
           serverList = localCSMAC;
@@ -11975,7 +11975,7 @@ var require_kex = __commonJS({
         for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
           ;
         if (i === clientList.length) {
-          debug2 && debug2("Handshake: No matching C->S MAC");
+          debug && debug("Handshake: No matching C->S MAC");
           return doFatalError(
             self2,
             "Handshake failed: no matching C->S MAC",
@@ -11984,14 +11984,14 @@ var require_kex = __commonJS({
           );
         }
         init.cs.mac = clientList[i];
-        debug2 && debug2(`Handshake: C->S MAC: ${clientList[i]}`);
+        debug && debug(`Handshake: C->S MAC: ${clientList[i]}`);
       }
       const localSCMAC = local.lists.sc.mac.array;
-      debug2 && debug2(`Handshake: (local) S->C MAC: ${localSCMAC}`);
-      debug2 && debug2(`Handshake: (remote) S->C MAC: ${remote.sc.mac}`);
+      debug && debug(`Handshake: (local) S->C MAC: ${localSCMAC}`);
+      debug && debug(`Handshake: (remote) S->C MAC: ${remote.sc.mac}`);
       if (CIPHER_INFO[init.sc.cipher].authLen > 0) {
         init.sc.mac = "";
-        debug2 && debug2("Handshake: S->C MAC: <implicit>");
+        debug && debug("Handshake: S->C MAC: <implicit>");
       } else {
         if (self2._server) {
           serverList = localSCMAC;
@@ -12003,7 +12003,7 @@ var require_kex = __commonJS({
         for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
           ;
         if (i === clientList.length) {
-          debug2 && debug2("Handshake: No matching S->C MAC");
+          debug && debug("Handshake: No matching S->C MAC");
           return doFatalError(
             self2,
             "Handshake failed: no matching S->C MAC",
@@ -12012,11 +12012,11 @@ var require_kex = __commonJS({
           );
         }
         init.sc.mac = clientList[i];
-        debug2 && debug2(`Handshake: S->C MAC: ${clientList[i]}`);
+        debug && debug(`Handshake: S->C MAC: ${clientList[i]}`);
       }
       const localCSCompress = local.lists.cs.compress.array;
-      debug2 && debug2(`Handshake: (local) C->S compression: ${localCSCompress}`);
-      debug2 && debug2(`Handshake: (remote) C->S compression: ${remote.cs.compress}`);
+      debug && debug(`Handshake: (local) C->S compression: ${localCSCompress}`);
+      debug && debug(`Handshake: (remote) C->S compression: ${remote.cs.compress}`);
       if (self2._server) {
         serverList = localCSCompress;
         clientList = remote.cs.compress;
@@ -12027,7 +12027,7 @@ var require_kex = __commonJS({
       for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
         ;
       if (i === clientList.length) {
-        debug2 && debug2("Handshake: No matching C->S compression");
+        debug && debug("Handshake: No matching C->S compression");
         return doFatalError(
           self2,
           "Handshake failed: no matching C->S compression",
@@ -12036,10 +12036,10 @@ var require_kex = __commonJS({
         );
       }
       init.cs.compress = clientList[i];
-      debug2 && debug2(`Handshake: C->S compression: ${clientList[i]}`);
+      debug && debug(`Handshake: C->S compression: ${clientList[i]}`);
       const localSCCompress = local.lists.sc.compress.array;
-      debug2 && debug2(`Handshake: (local) S->C compression: ${localSCCompress}`);
-      debug2 && debug2(`Handshake: (remote) S->C compression: ${remote.sc.compress}`);
+      debug && debug(`Handshake: (local) S->C compression: ${localSCCompress}`);
+      debug && debug(`Handshake: (remote) S->C compression: ${remote.sc.compress}`);
       if (self2._server) {
         serverList = localSCCompress;
         clientList = remote.sc.compress;
@@ -12050,7 +12050,7 @@ var require_kex = __commonJS({
       for (i = 0; i < clientList.length && serverList.indexOf(clientList[i]) === -1; ++i)
         ;
       if (i === clientList.length) {
-        debug2 && debug2("Handshake: No matching S->C compression");
+        debug && debug("Handshake: No matching S->C compression");
         return doFatalError(
           self2,
           "Handshake failed: no matching S->C compression",
@@ -12059,7 +12059,7 @@ var require_kex = __commonJS({
         );
       }
       init.sc.compress = clientList[i];
-      debug2 && debug2(`Handshake: S->C compression: ${clientList[i]}`);
+      debug && debug(`Handshake: S->C compression: ${clientList[i]}`);
       init.cs.lang = "";
       init.sc.lang = "";
       if (self2._kex) {
@@ -13384,9 +13384,9 @@ var require_Protocol = __commonJS({
         this._onError = (err) => {
           onError(err);
         };
-        const debug2 = config.debug;
-        this._debug = typeof debug2 === "function" ? (msg) => {
-          debug2(msg);
+        const debug = config.debug;
+        this._debug = typeof debug === "function" ? (msg) => {
+          debug(msg);
         } : void 0;
         const onHeader = config.onHeader;
         this._onHeader = typeof onHeader === "function" ? (...args) => {
@@ -18497,7 +18497,7 @@ var require_client = __commonJS({
         this.config.allowAgentFwd = cfg.agentForward === true && this.config.agent !== void 0;
         let authHandler = this.config.authHandler = typeof cfg.authHandler === "function" || Array.isArray(cfg.authHandler) ? cfg.authHandler : void 0;
         this.config.strictVendor = typeof cfg.strictVendor === "boolean" ? cfg.strictVendor : true;
-        const debug2 = this.config.debug = typeof cfg.debug === "function" ? cfg.debug : void 0;
+        const debug = this.config.debug = typeof cfg.debug === "function" ? cfg.debug : void 0;
         if (cfg.agentForward === true && !this.config.allowAgentFwd) {
           throw new Error(
             "You must set a valid agent path to allow agent forwarding"
@@ -18547,8 +18547,8 @@ var require_client = __commonJS({
         let sawHeader = false;
         if (this._protocol)
           this._protocol.cleanup();
-        const DEBUG_HANDLER = !debug2 ? void 0 : (p, display, msg) => {
-          debug2(`Debug output from server: ${JSON.stringify(msg)}`);
+        const DEBUG_HANDLER = !debug ? void 0 : (p, display, msg) => {
+          debug(`Debug output from server: ${JSON.stringify(msg)}`);
         };
         const proto = this._protocol = new Protocol({
           ident: this.config.ident,
@@ -18581,7 +18581,7 @@ var require_client = __commonJS({
               proto.service("ssh-userauth");
             }
           },
-          debug: debug2,
+          debug,
           hostVerifier,
           messageHandlers: {
             DEBUG: DEBUG_HANDLER,
@@ -18613,10 +18613,10 @@ var require_client = __commonJS({
             USERAUTH_FAILURE: (p, authMethods, partialSuccess) => {
               if (curAuth.type === "agent") {
                 const pos = curAuth.agentCtx.pos();
-                debug2 && debug2(`Client: Agent key #${pos + 1} failed`);
+                debug && debug(`Client: Agent key #${pos + 1} failed`);
                 return tryNextAgentKey();
               }
-              debug2 && debug2(`Client: ${curAuth.type} auth failed`);
+              debug && debug(`Client: ${curAuth.type} auth failed`);
               curPartial = partialSuccess;
               curAuthsLeft = authMethods;
               tryNextAuth();
@@ -18663,7 +18663,7 @@ var require_client = __commonJS({
               if (curAuth.type === "keyboard-interactive") {
                 const nprompts = Array.isArray(prompts) ? prompts.length : 0;
                 if (nprompts === 0) {
-                  debug2 && debug2(
+                  debug && debug(
                     "Client: Sending automatic USERAUTH_INFO_RESPONSE"
                   );
                   proto.authInfoRes();
@@ -18728,7 +18728,7 @@ var require_client = __commonJS({
                   state: "open"
                 }
               };
-              const instance = isSFTP ? new SFTP(this, chanInfo, { debug: debug2 }) : new Channel(this, chanInfo);
+              const instance = isSFTP ? new SFTP(this, chanInfo, { debug }) : new Channel(this, chanInfo);
               this._chanMgr.update(info.recipient, instance);
               channel(void 0, instance);
             },
@@ -18899,7 +18899,7 @@ var require_client = __commonJS({
               return;
             called = true;
             wasConnected = true;
-            debug2 && debug2("Socket connected");
+            debug && debug("Socket connected");
             this.emit("connect");
             cryptoInit.then(() => {
               proto.start();
@@ -18932,19 +18932,19 @@ var require_client = __commonJS({
         sock.on("connect", onConnect).on("timeout", () => {
           this.emit("timeout");
         }).on("error", (err) => {
-          debug2 && debug2(`Socket error: ${err.message}`);
+          debug && debug(`Socket error: ${err.message}`);
           clearTimeout(this._readyTimeout);
           err.level = "client-socket";
           this.emit("error", err);
         }).on("end", () => {
-          debug2 && debug2("Socket ended");
+          debug && debug("Socket ended");
           onDone();
           proto.cleanup();
           clearTimeout(this._readyTimeout);
           clearInterval(katimer);
           this.emit("end");
         }).on("close", () => {
-          debug2 && debug2("Socket closed");
+          debug && debug("Socket closed");
           onDone();
           proto.cleanup();
           clearTimeout(this._readyTimeout);
@@ -19152,7 +19152,7 @@ var require_client = __commonJS({
           }
         };
         function skipAuth(msg) {
-          debug2 && debug2(msg);
+          debug && debug(msg);
           process.nextTick(tryNextAuth);
         }
         function tryNextAuth() {
@@ -19166,12 +19166,12 @@ var require_client = __commonJS({
           if (curAuth.type === "agent") {
             const key = curAuth.agentCtx.nextKey();
             if (key === false) {
-              debug2 && debug2("Agent: No more keys left to try");
-              debug2 && debug2("Client: agent auth failed");
+              debug && debug("Agent: No more keys left to try");
+              debug && debug("Client: agent auth failed");
               tryNextAuth();
             } else {
               const pos = curAuth.agentCtx.pos();
-              debug2 && debug2(`Agent: Trying key #${pos + 1}`);
+              debug && debug(`Agent: Trying key #${pos + 1}`);
               proto.authPK(curAuth.username, key);
             }
           }
@@ -19190,7 +19190,7 @@ var require_client = __commonJS({
           let host = this.config.host;
           const forceIPv4 = this.config.forceIPv4;
           const forceIPv6 = this.config.forceIPv6;
-          debug2 && debug2(`Client: Trying ${host} on port ${this.config.port} ...`);
+          debug && debug(`Client: Trying ${host} on port ${this.config.port} ...`);
           const doConnect = () => {
             startTimeout();
             sock.connect({
@@ -20318,14 +20318,14 @@ var require_server = __commonJS({
           socket.once("close", () => {
             --this._connections;
           });
-          let debug2;
+          let debug;
           if (origDebug) {
             const debugPrefix = `[${process.hrtime().join(".")}] `;
-            debug2 = (msg) => {
+            debug = (msg) => {
               origDebug(`${debugPrefix}${msg}`);
             };
           }
-          new Client(socket, hostKeys, ident, offer, debug2, this, cfg);
+          new Client(socket, hostKeys, ident, offer, debug, this, cfg);
         }).on("error", (err) => {
           this.emit("error", err);
         }).on("listening", () => {
@@ -20366,7 +20366,7 @@ var require_server = __commonJS({
     Server.KEEPALIVE_CLIENT_INTERVAL = 15e3;
     Server.KEEPALIVE_CLIENT_COUNT_MAX = 3;
     var Client = class extends EventEmitter2 {
-      constructor(socket, hostKeys, ident, offer, debug2, server, srvCfg) {
+      constructor(socket, hostKeys, ident, offer, debug, server, srvCfg) {
         super();
         let exchanges = 0;
         let acceptedAuthSvc = false;
@@ -20377,14 +20377,14 @@ var require_server = __commonJS({
         const unsentGlobalRequestsReplies = [];
         this._sock = socket;
         this._chanMgr = new ChannelManager(this);
-        this._debug = debug2;
+        this._debug = debug;
         this.noMoreSessions = false;
         this.authenticated = false;
         function onClientPreHeaderError(err) {
         }
         this.on("error", onClientPreHeaderError);
-        const DEBUG_HANDLER = !debug2 ? void 0 : (p, display, msg) => {
-          debug2(`Debug output from client: ${JSON.stringify(msg)}`);
+        const DEBUG_HANDLER = !debug ? void 0 : (p, display, msg) => {
+          debug(`Debug output from client: ${JSON.stringify(msg)}`);
         };
         const kaIntvl = typeof srvCfg.keepaliveInterval === "number" && isFinite(srvCfg.keepaliveInterval) && srvCfg.keepaliveInterval > 0 ? srvCfg.keepaliveInterval : typeof Server.KEEPALIVE_CLIENT_INTERVAL === "number" && isFinite(Server.KEEPALIVE_CLIENT_INTERVAL) && Server.KEEPALIVE_CLIENT_INTERVAL > 0 ? Server.KEEPALIVE_CLIENT_INTERVAL : -1;
         const kaCountMax = typeof srvCfg.keepaliveCountMax === "number" && isFinite(srvCfg.keepaliveCountMax) && srvCfg.keepaliveCountMax >= 0 ? srvCfg.keepaliveCountMax : typeof Server.KEEPALIVE_CLIENT_COUNT_MAX === "number" && isFinite(Server.KEEPALIVE_CLIENT_COUNT_MAX) && Server.KEEPALIVE_CLIENT_COUNT_MAX >= 0 ? Server.KEEPALIVE_CLIENT_COUNT_MAX : -1;
@@ -20454,7 +20454,7 @@ var require_server = __commonJS({
               this.emit("rekey");
             this.emit("handshake", negotiated);
           },
-          debug: debug2,
+          debug,
           messageHandlers: {
             DEBUG: DEBUG_HANDLER,
             DISCONNECT: (p, reason, desc) => {
@@ -20497,8 +20497,8 @@ var require_server = __commonJS({
                 localChan = this._chanMgr.add();
                 if (localChan === -1) {
                   reason = CHANNEL_OPEN_FAILURE.RESOURCE_SHORTAGE;
-                  if (debug2) {
-                    debug2("Automatic rejection of incoming channel open: no channels available");
+                  if (debug) {
+                    debug("Automatic rejection of incoming channel open: no channels available");
                   }
                 }
                 return localChan !== -1;
@@ -20597,14 +20597,14 @@ var require_server = __commonJS({
                   break;
                 default:
                   reason = CHANNEL_OPEN_FAILURE.UNKNOWN_CHANNEL_TYPE;
-                  if (debug2) {
-                    debug2(`Automatic rejection of unsupported incoming channel open type: ${info.type}`);
+                  if (debug) {
+                    debug(`Automatic rejection of unsupported incoming channel open type: ${info.type}`);
                   }
               }
               if (reason === void 0) {
                 reason = CHANNEL_OPEN_FAILURE.ADMINISTRATIVELY_PROHIBITED;
-                if (debug2) {
-                  debug2(`Automatic rejection of unexpected incoming channel open for: ${info.type}`);
+                if (debug) {
+                  debug(`Automatic rejection of unexpected incoming channel open for: ${info.type}`);
                 }
               }
               reject();
@@ -20841,7 +20841,7 @@ var require_server = __commonJS({
                     if (useSFTP) {
                       instance = new SFTP(this, session._chanInfo, {
                         server: true,
-                        debug: debug2
+                        debug
                       });
                     } else {
                       instance = new Channel(
@@ -20870,7 +20870,7 @@ var require_server = __commonJS({
                   break;
                 }
               }
-              debug2 && debug2(
+              debug && debug(
                 `Automatic rejection of incoming channel request: ${type}`
               );
               reject && reject();
@@ -21078,11 +21078,11 @@ var require_server = __commonJS({
           err.level = "socket";
           this.emit("error", err);
         }).once("end", () => {
-          debug2 && debug2("Socket ended");
+          debug && debug("Socket ended");
           proto.cleanup();
           this.emit("end");
         }).once("close", () => {
-          debug2 && debug2("Socket closed");
+          debug && debug("Socket closed");
           proto.cleanup();
           this.emit("close");
           const err = new Error("No response from server");
@@ -21439,12 +21439,11 @@ async function run() {
       username,
       password
     });
-    core.debug(new Date().toTimeString());
-    core.debug("start upload files...");
-    core.debug("commands", commands);
+    console.log("start upload files...");
+    console.log("commands", commands);
     await scpClient.waitForReady();
     await scpClient.uploadDirectory(sourcePath, targetPath);
-    core.debug("upload success!");
+    console.log("upload success!");
     await scpClient.close();
     return true;
   } catch (error) {
