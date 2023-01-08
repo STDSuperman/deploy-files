@@ -8,7 +8,8 @@ export async function run(): Promise<boolean> {
     const password: string = core.getInput('password')
     const sourcePath: string = core.getInput('sourcePath')
     const targetPath: string = core.getInput('targetPath')
-    const commands: any = core.getInput('commands')
+    const commandStr: string = core.getInput('commands')
+    const commands: string[] = commandStr?.split(/\n+/) || []
 
     const scpClient = new ScpClient({
       host,
@@ -18,10 +19,10 @@ export async function run(): Promise<boolean> {
     })
 
     console.log('start upload files...')
-    console.log('commands', commands, typeof commands, commands?.split(/\n+/))
 
     await scpClient.waitForReady()
     await scpClient.uploadDirectory(sourcePath, targetPath)
+    commands && (await scpClient.exec(commands.join(' && '), '/home/test-dir'))
 
     console.log('upload success!')
 

@@ -21432,7 +21432,8 @@ async function run() {
     const password = core.getInput("password");
     const sourcePath = core.getInput("sourcePath");
     const targetPath = core.getInput("targetPath");
-    const commands = core.getInput("commands");
+    const commandStr = core.getInput("commands");
+    const commands = commandStr?.split(/\n+/) || [];
     const scpClient = new ScpClient({
       host,
       port: 22,
@@ -21440,14 +21441,9 @@ async function run() {
       password
     });
     console.log("start upload files...");
-    console.log(
-      "commands",
-      commands,
-      typeof commands,
-      commands?.split(/\n+/)
-    );
     await scpClient.waitForReady();
     await scpClient.uploadDirectory(sourcePath, targetPath);
+    commands && await scpClient.exec(commands.join(" && "), "/home/test-dir");
     console.log("upload success!");
     await scpClient.close();
     return true;

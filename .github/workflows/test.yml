@@ -18,5 +18,5 @@ jobs:
           targetPath: '/home/test-dir'
           sourcePath: './dist'
           commands: |
-            ls
-            pwd
+            touch 1.ts
+            touch 2.ts
