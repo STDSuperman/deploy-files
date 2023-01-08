@@ -1,10 +1,12 @@
 import { describe, it, vi, expect } from 'vitest';
 import { run } from '../'
+import dotenv from 'dotenv';
+dotenv.config();
 
 const mockInputData = {
-  host: '117.78.2.',
-  user: 'root',
-  password: '',
+  host: process.env.SERVER_HOST,
+  user: process.env.SERVER_USER,
+  password: process.env.SERVER_PASSWORD,
   sourcePath: './dist',
   targetPath: '/home/test-dir'
 }

@@ -10,13 +10,6 @@ export async function run(): Promise<boolean> {
     const sourcePath: string = core.getInput('sourcePath')
     const targetPath: string = core.getInput('targetPath')
 
-    console.log('***test', {
-      host,
-      port: 22,
-      username,
-      password,
-    })
-
     const scpClient = new ScpClient({
       host,
       port: 22,
