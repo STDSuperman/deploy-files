@@ -92,9 +92,6 @@ export class ScpClient extends EventEmitter {
   public async uploadDirectory(src: string, dest: string): Promise<void> {
     console.log('start upload directory');
     const isExist = await this.checkExist(dest)
-
-    console.log('isExist', isExist)
-
     if (!isExist) {
       await this.mkdir(dest)
     }
@@ -115,6 +112,21 @@ export class ScpClient extends EventEmitter {
         await this.uploadFile(newSrc, newDst)
       }
     }
+  }
+
+  public async exec(command: string, cwd: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.sshClient?.exec(`cd ${cwd} && ${command}`, {}, (err, channel) => {
+        if (err) {
+          reject(err)
+          console.error('exec: ', err);
+        }
+
+        channel.on('exit', (...args) => {
+          resolve()
+        })
+      })
+    })
   }
 
   public close() {

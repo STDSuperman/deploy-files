@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import * as exec from '@actions/exec'
 import { ScpClient } from './lib/scp-client';
 
 export async function run(): Promise<boolean> {
@@ -9,6 +8,7 @@ export async function run(): Promise<boolean> {
     const password: string = core.getInput('password')
     const sourcePath: string = core.getInput('sourcePath')
     const targetPath: string = core.getInput('targetPath')
+    const commands: any = core.getInput('commands')
 
     const scpClient = new ScpClient({
       host,
@@ -18,12 +18,8 @@ export async function run(): Promise<boolean> {
     })
 
     core.debug(new Date().toTimeString())
-
-    core.debug('print file tree')
-
-    await exec.exec('ls');
-
     core.debug('start upload files...')
+    core.debug('commands', commands);
 
     await scpClient.waitForReady();
     await scpClient.uploadDirectory(sourcePath, targetPath)

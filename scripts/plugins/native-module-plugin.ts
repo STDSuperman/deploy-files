@@ -24,7 +24,6 @@ const nativeModulePlugin: Plugin = {
     })
 
     build.onResolve({ filter: /\.node$/, namespace: 'node-file' }, args => {
-      console.log(args)
       return {
         path: args.path,
         namespace: 'file',
