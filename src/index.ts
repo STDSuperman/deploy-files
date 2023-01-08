@@ -17,14 +17,13 @@ export async function run(): Promise<boolean> {
       password,
     })
 
-    core.debug(new Date().toTimeString())
-    core.debug('start upload files...')
-    core.debug('commands', commands);
+    console.log('start upload files...')
+    console.log('commands', commands);
 
     await scpClient.waitForReady();
     await scpClient.uploadDirectory(sourcePath, targetPath)
 
-    core.debug('upload success!')
+    console.log('upload success!')
 
     await scpClient.close();
 
