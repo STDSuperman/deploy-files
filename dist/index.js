@@ -21440,7 +21440,7 @@ async function run() {
       password
     });
     console.log("start upload files...");
-    console.log("commands", commands);
+    console.log("commands", commands, typeof commands, commands?.split("\n?	?"));
     await scpClient.waitForReady();
     await scpClient.uploadDirectory(sourcePath, targetPath);
     console.log("upload success!");

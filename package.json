@@ -7,7 +7,8 @@
     "test": "vitest",
     "lint:fix": "eslint --fix src",
     "style:fix": "prettier --write src",
-    "build": "tsx scripts/build.ts"
+    "build": "tsx scripts/build.ts",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
