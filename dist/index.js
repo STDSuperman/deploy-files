@@ -21297,7 +21297,6 @@ var ScpClient = class extends import_events.EventEmitter {
   }
   async checkExist(remotePath) {
     try {
-      console.log("start check exist");
       const stats = await this.stat(remotePath);
       if (stats.isDirectory()) {
         return "d";
@@ -21316,7 +21315,6 @@ var ScpClient = class extends import_events.EventEmitter {
   async mkdir(remotePath, attributes = {}) {
     return new Promise((resolve, reject) => {
       (0, import_assert.default)(this.sftpWrapper, "ssh is not connected!");
-      console.log("start mkdir");
       this.sftpWrapper.mkdir(remotePath, attributes, (err) => {
         if (err) {
           console.error("mkdir error: " + err.message);
@@ -21328,7 +21326,6 @@ var ScpClient = class extends import_events.EventEmitter {
     });
   }
   async uploadDirectory(src, dest) {
-    console.log("start upload directory");
     const isExist = await this.checkExist(dest);
     if (!isExist) {
       await this.mkdir(dest);

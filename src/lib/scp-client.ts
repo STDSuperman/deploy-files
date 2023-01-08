@@ -59,7 +59,6 @@ export class ScpClient extends EventEmitter {
 
   public async checkExist(remotePath: string): Promise<string> {
     try {
-      console.log('start check exist')
       const stats = await this.stat(remotePath)
 
       if (stats.isDirectory()) {
@@ -83,7 +82,6 @@ export class ScpClient extends EventEmitter {
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       assert(this.sftpWrapper, 'ssh is not connected!')
-      console.log('start mkdir')
       this.sftpWrapper.mkdir(remotePath, attributes, (err) => {
         if (err) {
           console.error('mkdir error: ' + err.message)
@@ -96,7 +94,6 @@ export class ScpClient extends EventEmitter {
   }
 
   public async uploadDirectory(src: string, dest: string): Promise<void> {
-    console.log('start upload directory')
     const isExist = await this.checkExist(dest)
     if (!isExist) {
       await this.mkdir(dest)
