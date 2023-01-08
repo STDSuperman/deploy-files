@@ -12,6 +12,12 @@
     "prepare": "husky install",
     "cz": ""
   },
+  "lint-staged": {
+    "**/*.ts": [
+      "prettier --write src --list-different",
+      "eslint --fix src"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/STDSuperman/deploy-files.git"
@@ -30,6 +36,7 @@
     "esbuild": "^0.16.13",
     "eslint": "^8.31.0",
     "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
     "prettier": "^2.8.1",
     "tsx": "^3.12.1",
     "typescript": "^4.9.4",
