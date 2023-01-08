@@ -21287,7 +21287,9 @@ var ScpClient = class extends import_events.EventEmitter {
       (0, import_assert.default)(this.sftpWrapper, "ssh is not connected!");
       this.sftpWrapper.stat(remotePath, (err, stats) => {
         if (err) {
-          console.error("stat error: " + err.message);
+          if (!err.message?.includes("No such file")) {
+            console.error("stat error: " + err.message);
+          }
           reject(err);
         } else {
           resolve(stats);

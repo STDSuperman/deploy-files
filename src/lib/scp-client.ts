@@ -48,7 +48,9 @@ export class ScpClient extends EventEmitter {
       assert(this.sftpWrapper, 'ssh is not connected!')
       this.sftpWrapper.stat(remotePath, (err, stats) => {
         if (err) {
-          console.error('stat error: ' + err.message)
+          if (!err.message?.includes('No such file')) {
+            console.error('stat error: ' + err.message)
+          }
           reject(err)
         } else {
           resolve(stats)
