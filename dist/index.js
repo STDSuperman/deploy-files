@@ -21424,6 +21424,9 @@ var ScpClient = class extends import_events.EventEmitter {
   }
 };
 
+// src/lib/logger.ts
+var logger = console;
+
 // src/index.ts
 async function run() {
   try {
@@ -21440,11 +21443,15 @@ async function run() {
       username,
       password
     });
-    console.log("start upload files...");
     await scpClient.waitForReady();
+    logger.log("start upload files...");
     await scpClient.uploadDirectory(sourcePath, targetPath);
-    commands && await scpClient.exec(commands.join(" && "), "/home/test-dir");
-    console.log("upload success!");
+    logger.log("upload success!");
+    if (commands?.length) {
+      logger.log("start exec commands...");
+      await scpClient.exec(commands.join(" && "), "/home/test-dir");
+      logger.log("command exec success!");
+    }
     await scpClient.close();
     return true;
   } catch (error) {

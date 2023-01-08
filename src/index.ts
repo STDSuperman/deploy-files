@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import { ScpClient } from './lib/scp-client'
+import { logger } from './lib/logger'
 
 export async function run(): Promise<boolean> {
   try {
@@ -18,13 +19,17 @@ export async function run(): Promise<boolean> {
       password,
     })
 
-    console.log('start upload files...')
-
     await scpClient.waitForReady()
-    await scpClient.uploadDirectory(sourcePath, targetPath)
-    commands && (await scpClient.exec(commands.join(' && '), '/home/test-dir'))
 
-    console.log('upload success!')
+    logger.log('start upload files...')
+    await scpClient.uploadDirectory(sourcePath, targetPath)
+    logger.log('upload success!')
+
+    if (commands?.length) {
+      logger.log('start exec commands...')
+      await scpClient.exec(commands.join(' && '), '/home/test-dir')
+      logger.log('command exec success!')
+    }
 
     await scpClient.close()
 
