@@ -9,7 +9,8 @@
     "style:fix": "prettier --write src",
     "build": "tsx scripts/build.ts",
     "prepublish": "npm run build",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cz": ""
   },
   "repository": {
     "type": "git",

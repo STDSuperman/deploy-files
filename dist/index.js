@@ -6151,17 +6151,17 @@ var require_bcrypt_pbkdf = __commonJS({
   }
 });
 
-// node_modules/.pnpm/cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node
+// node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node
 var cpufeatures_default;
 var init_cpufeatures = __esm({
-  "node_modules/.pnpm/cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node"() {
-    cpufeatures_default = "./cpufeatures-CQLJTDMJ.node";
+  "node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node"() {
+    cpufeatures_default = "./cpufeatures-Z7EPC7NG.node";
   }
 });
 
-// node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node
+// node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node
 var require_cpufeatures = __commonJS({
-  "node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node"(exports, module2) {
+  "node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node"(exports, module2) {
     init_cpufeatures();
     try {
       module2.exports = require(cpufeatures_default);
@@ -6170,9 +6170,9 @@ var require_cpufeatures = __commonJS({
   }
 });
 
-// node_modules/.pnpm/cpu-features@0.0.4/node_modules/cpu-features/lib/index.js
+// node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/lib/index.js
 var require_lib3 = __commonJS({
-  "node_modules/.pnpm/cpu-features@0.0.4/node_modules/cpu-features/lib/index.js"(exports, module2) {
+  "node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/lib/index.js"(exports, module2) {
     "use strict";
     var binding = require_cpufeatures();
     module2.exports = binding.getCPUInfo;
@@ -21440,7 +21440,7 @@ async function run() {
       password
     });
     console.log("start upload files...");
-    console.log("commands", commands, typeof commands, commands?.split("\n?	?"));
+    console.log("commands", commands, typeof commands, commands?.split("\n*	*"));
     await scpClient.waitForReady();
     await scpClient.uploadDirectory(sourcePath, targetPath);
     console.log("upload success!");
