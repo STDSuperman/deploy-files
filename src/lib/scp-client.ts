@@ -1,25 +1,28 @@
 import { EventEmitter } from 'events'
 import { Client as SSHClient, SFTPWrapper } from 'ssh2'
-import type { ConnectConfig, TransferOptions, Stats, InputAttributes } from 'ssh2'
+import type {
+  ConnectConfig,
+  TransferOptions,
+  Stats,
+  InputAttributes,
+} from 'ssh2'
 import { win32, posix } from 'path'
 import assert from 'assert'
 import path from 'path'
 import fs from 'fs'
 
 interface IConfig extends ConnectConfig {
-  remoteOsType?: 'posix' | 'win32';
+  remoteOsType?: 'posix' | 'win32'
 }
 
 export class ScpClient extends EventEmitter {
   private sftpWrapper: SFTPWrapper | null = null
   private sshClient: SSHClient | null = null
-  private remotePathSep = posix.sep;
+  private remotePathSep = posix.sep
 
-  constructor(
-    public config: IConfig
-  ) {
-    super();
-    this.initSsh();
+  constructor(public config: IConfig) {
+    super()
+    this.initSsh()
   }
 
   public async uploadFile(
@@ -28,7 +31,7 @@ export class ScpClient extends EventEmitter {
     options?: TransferOptions
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      assert(this.sftpWrapper, 'ssh is not connected!');
+      assert(this.sftpWrapper, 'ssh is not connected!')
       this.sftpWrapper.fastPut(sourcePath, targetPath, options || {}, (err) => {
         if (err) {
           console.error('fast put error: ' + err.message)
@@ -42,7 +45,7 @@ export class ScpClient extends EventEmitter {
 
   public async stat(remotePath: string): Promise<Stats> {
     return new Promise((resolve, reject) => {
-      assert(this.sftpWrapper, 'ssh is not connected!');
+      assert(this.sftpWrapper, 'ssh is not connected!')
       this.sftpWrapper.stat(remotePath, (err, stats) => {
         if (err) {
           console.error('stat error: ' + err.message)
@@ -56,7 +59,7 @@ export class ScpClient extends EventEmitter {
 
   public async checkExist(remotePath: string): Promise<string> {
     try {
-      console.log('start check exist');
+      console.log('start check exist')
       const stats = await this.stat(remotePath)
 
       if (stats.isDirectory()) {
@@ -74,10 +77,13 @@ export class ScpClient extends EventEmitter {
     }
   }
 
-  public async mkdir(remotePath: string, attributes: InputAttributes = {}): Promise<void> {
+  public async mkdir(
+    remotePath: string,
+    attributes: InputAttributes = {}
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
-      assert(this.sftpWrapper, 'ssh is not connected!');
-      console.log('start mkdir');
+      assert(this.sftpWrapper, 'ssh is not connected!')
+      console.log('start mkdir')
       this.sftpWrapper.mkdir(remotePath, attributes, (err) => {
         if (err) {
           console.error('mkdir error: ' + err.message)
@@ -90,7 +96,7 @@ export class ScpClient extends EventEmitter {
   }
 
   public async uploadDirectory(src: string, dest: string): Promise<void> {
-    console.log('start upload directory');
+    console.log('start upload directory')
     const isExist = await this.checkExist(dest)
     if (!isExist) {
       await this.mkdir(dest)
@@ -119,7 +125,7 @@ export class ScpClient extends EventEmitter {
       this.sshClient?.exec(`cd ${cwd} && ${command}`, {}, (err, channel) => {
         if (err) {
           reject(err)
-          console.error('exec: ', err);
+          console.error('exec: ', err)
         }
 
         channel.on('exit', (...args) => {
@@ -140,15 +146,15 @@ export class ScpClient extends EventEmitter {
   public async waitForReady(cb = () => void 0): Promise<void> {
     return new Promise((resolve, reject) => {
       const resolveFn = async () => {
-        await cb();
-        resolve();
+        await cb()
+        resolve()
       }
 
-      if (this.sftpWrapper) resolveFn();
+      if (this.sftpWrapper) resolveFn()
 
-      this.on('ready', resolveFn);
-      this.on('error', reject);
-      this.on('close', reject);
+      this.on('ready', resolveFn)
+      this.on('error', reject)
+      this.on('close', reject)
     })
   }
 
@@ -168,7 +174,9 @@ export class ScpClient extends EventEmitter {
 
     ssh.on('ready', () => {
       ssh.sftp((err, sftp: SFTPWrapper) => {
-        if (err) { throw err }
+        if (err) {
+          throw err
+        }
         this.sftpWrapper = sftp
         this.emit('ready')
       })
