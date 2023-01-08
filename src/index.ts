@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { ScpClient } from './lib/scp-client';
+import { ScpClient } from './lib/scp-client'
 
 export async function run(): Promise<boolean> {
   try {
@@ -18,23 +18,28 @@ export async function run(): Promise<boolean> {
     })
 
     console.log('start upload files...')
-    console.log('commands', commands, typeof commands, commands?.split('\n*\t*'));
+    console.log(
+      'commands',
+      commands,
+      typeof commands,
+      commands?.split(/\n*\t*/)
+    )
 
-    await scpClient.waitForReady();
+    await scpClient.waitForReady()
     await scpClient.uploadDirectory(sourcePath, targetPath)
 
     console.log('upload success!')
 
-    await scpClient.close();
+    await scpClient.close()
 
-    return true;
+    return true
   } catch (error) {
     if (error instanceof Error) {
       console.error(error)
       core.setFailed(error.message)
     }
   }
-  return false;
+  return false
 }
 
 run()
