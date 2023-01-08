@@ -21426,6 +21426,11 @@ var ScpClient = class extends import_events.EventEmitter {
 // src/lib/logger.ts
 var logger = console;
 
+// src/utils/index.ts
+var parseCommandStr = (cmd) => {
+  return cmd?.split(/\n+/) || [];
+};
+
 // src/index.ts
 async function run() {
   try {
@@ -21435,7 +21440,9 @@ async function run() {
     const sourcePath = core.getInput("sourcePath");
     const targetPath = core.getInput("targetPath");
     const commandStr = core.getInput("commands");
-    const commands = commandStr?.split(/\n+/) || [];
+    const preCommandStr = core.getInput("preCommands");
+    const postCommands = parseCommandStr(commandStr);
+    const preCommands = parseCommandStr(preCommandStr);
     const scpClient = new ScpClient({
       host,
       port: 22,
@@ -21443,12 +21450,17 @@ async function run() {
       password
     });
     await scpClient.waitForReady();
+    if (preCommands?.length) {
+      logger.log("start exec pre commands...");
+      await scpClient.exec(preCommands.join(" && "), "/home/test-dir");
+      logger.log("pre command exec success!");
+    }
     logger.log("start upload files...");
     await scpClient.uploadDirectory(sourcePath, targetPath);
     logger.log("upload success!");
-    if (commands?.length) {
+    if (postCommands?.length) {
       logger.log("start exec commands...");
-      await scpClient.exec(commands.join(" && "), "/home/test-dir");
+      await scpClient.exec(postCommands.join(" && "), "/home/test-dir");
       logger.log("command exec success!");
     }
     await scpClient.close();

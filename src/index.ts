@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import { ScpClient } from './lib/scp-client'
 import { logger } from './lib/logger'
+import { parseCommandStr } from './utils'
 
 export async function run(): Promise<boolean> {
   try {
@@ -10,7 +11,9 @@ export async function run(): Promise<boolean> {
     const sourcePath: string = core.getInput('sourcePath')
     const targetPath: string = core.getInput('targetPath')
     const commandStr: string = core.getInput('commands')
-    const commands: string[] = commandStr?.split(/\n+/) || []
+    const preCommandStr: string = core.getInput('preCommands')
+    const postCommands: string[] = parseCommandStr(commandStr)
+    const preCommands: string[] = parseCommandStr(preCommandStr)
 
     const scpClient = new ScpClient({
       host,
@@ -21,13 +24,19 @@ export async function run(): Promise<boolean> {
 
     await scpClient.waitForReady()
 
+    if (preCommands?.length) {
+      logger.log('start exec pre commands...')
+      await scpClient.exec(preCommands.join(' && '), '/home/test-dir')
+      logger.log('pre command exec success!')
+    }
+
     logger.log('start upload files...')
     await scpClient.uploadDirectory(sourcePath, targetPath)
     logger.log('upload success!')
 
-    if (commands?.length) {
+    if (postCommands?.length) {
       logger.log('start exec commands...')
-      await scpClient.exec(commands.join(' && '), '/home/test-dir')
+      await scpClient.exec(postCommands.join(' && '), '/home/test-dir')
       logger.log('command exec success!')
     }
 
