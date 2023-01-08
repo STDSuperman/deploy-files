@@ -18,12 +18,7 @@ export async function run(): Promise<boolean> {
     })
 
     console.log('start upload files...')
-    console.log(
-      'commands',
-      commands,
-      typeof commands,
-      commands?.split(/\n*\t*/)
-    )
+    console.log('commands', commands, typeof commands, commands?.split(/\n+/))
 
     await scpClient.waitForReady()
     await scpClient.uploadDirectory(sourcePath, targetPath)

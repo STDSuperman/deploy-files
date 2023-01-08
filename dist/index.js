@@ -21444,7 +21444,7 @@ async function run() {
       "commands",
       commands,
       typeof commands,
-      commands?.split(/\n*\t*/)
+      commands?.split(/\n+/)
     );
     await scpClient.waitForReady();
     await scpClient.uploadDirectory(sourcePath, targetPath);
