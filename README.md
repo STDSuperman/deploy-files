@@ -1,4 +1,4 @@
-# deploy-files
+# Github Action of Deploy Files
 
 An action that deploys the files to the server and executes some commands.
 
