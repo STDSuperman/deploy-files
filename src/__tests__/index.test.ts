@@ -9,6 +9,8 @@ const mockInputData = {
   password: process.env.SERVER_PASSWORD,
   sourcePath: './dist',
   targetPath: '/home/test-dir',
+  preCommands: 'touch 1.ts',
+  // serverCwd: '/home/'
 }
 
 describe('test deploy files', () => {

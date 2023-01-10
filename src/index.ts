@@ -11,6 +11,7 @@ export async function run(): Promise<boolean> {
     const sourcePath: string = core.getInput('sourcePath')
     const targetPath: string = core.getInput('targetPath')
     const commandStr: string = core.getInput('commands')
+    const serverCwd: string = core.getInput('serverCwd') || '~'
     const preCommandStr: string = core.getInput('preCommands')
     const postCommands: string[] = parseCommandStr(commandStr)
     const preCommands: string[] = parseCommandStr(preCommandStr)
@@ -26,7 +27,7 @@ export async function run(): Promise<boolean> {
 
     if (preCommands?.length) {
       logger.log('start exec pre commands...')
-      await scpClient.exec(preCommands.join(' && '), '/home/test-dir')
+      await scpClient.exec(preCommands.join(' && '), serverCwd)
       logger.log('pre command exec success!')
     }
 
@@ -36,7 +37,7 @@ export async function run(): Promise<boolean> {
 
     if (postCommands?.length) {
       logger.log('start exec commands...')
-      await scpClient.exec(postCommands.join(' && '), '/home/test-dir')
+      await scpClient.exec(postCommands.join(' && '), serverCwd)
       logger.log('command exec success!')
     }
 
@@ -52,4 +53,4 @@ export async function run(): Promise<boolean> {
   return false
 }
 
-run()
+!process.env.TEST && run()
