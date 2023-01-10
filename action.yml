@@ -1,6 +1,8 @@
 name: 'Rapid deployment action'
 description: 'An action that deploys the files to the server and executes some commands.'
 author: 'STDSuperman'
+icon: 'upload-cloud'
+color: '#7bbfea'
 runs:
   using: 'node16'
   main: 'dist/index.js'
