@@ -3,7 +3,7 @@ description: 'An action that deploys the files to the server and executes some c
 author: 'STDSuperman'
 branding:
   icon: 'upload-cloud'
-  color: '#7bbfea'
+  color: 'orange'
 runs:
   using: 'node16'
   main: 'dist/index.js'
