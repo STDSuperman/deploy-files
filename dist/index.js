@@ -21438,6 +21438,7 @@ async function run() {
     const username = core.getInput("user");
     const password = core.getInput("password");
     const sourcePath = core.getInput("sourcePath");
+    const port = core.getInput("port");
     const targetPath = core.getInput("targetPath");
     const commandStr = core.getInput("commands");
     const serverCwd = core.getInput("serverCwd") || "~";
@@ -21446,14 +21447,16 @@ async function run() {
     const preCommands = parseCommandStr(preCommandStr);
     const scpClient = new ScpClient({
       host,
-      port: 22,
+      port: Number(port || 22),
       username,
       password
     });
     await scpClient.waitForReady();
     if (preCommands?.length) {
       logger.log("start exec pre commands...");
-      await Promise.all(preCommands.map((command) => scpClient.exec(command, serverCwd)));
+      await Promise.all(
+        preCommands.map((command) => scpClient.exec(command, serverCwd))
+      );
       logger.log("pre command exec success!");
     }
     logger.log("start upload files...");
@@ -21461,7 +21464,9 @@ async function run() {
     logger.log("upload success!");
     if (postCommands?.length) {
       logger.log("start exec commands...");
-      await Promise.all(postCommands.map((command) => scpClient.exec(command, serverCwd)));
+      await Promise.all(
+        postCommands.map((command) => scpClient.exec(command, serverCwd))
+      );
       logger.log("command exec success!");
     }
     await scpClient.close();

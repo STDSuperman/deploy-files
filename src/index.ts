@@ -9,6 +9,7 @@ export async function run(): Promise<boolean> {
     const username: string = core.getInput('user')
     const password: string = core.getInput('password')
     const sourcePath: string = core.getInput('sourcePath')
+    const port: string = core.getInput('port')
     const targetPath: string = core.getInput('targetPath')
     const commandStr: string = core.getInput('commands')
     const serverCwd: string = core.getInput('serverCwd') || '~'
@@ -18,7 +19,7 @@ export async function run(): Promise<boolean> {
 
     const scpClient = new ScpClient({
       host,
-      port: 22,
+      port: Number(port || 22),
       username,
       password,
     })
