@@ -27,7 +27,9 @@ export async function run(): Promise<boolean> {
 
     if (preCommands?.length) {
       logger.log('start exec pre commands...')
-      await scpClient.exec(preCommands.join(' && '), serverCwd)
+      await Promise.all(
+        preCommands.map((command) => scpClient.exec(command, serverCwd))
+      )
       logger.log('pre command exec success!')
     }
 
@@ -37,7 +39,9 @@ export async function run(): Promise<boolean> {
 
     if (postCommands?.length) {
       logger.log('start exec commands...')
-      await scpClient.exec(postCommands.join(' && '), serverCwd)
+      await Promise.all(
+        postCommands.map((command) => scpClient.exec(command, serverCwd))
+      )
       logger.log('command exec success!')
     }
 

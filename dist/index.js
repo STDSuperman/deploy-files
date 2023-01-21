@@ -6155,13 +6155,13 @@ var require_bcrypt_pbkdf = __commonJS({
 var cpufeatures_default;
 var init_cpufeatures = __esm({
   "node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node"() {
-    cpufeatures_default = "./cpufeatures-CDL2M4GG.node";
+    cpufeatures_default = "./cpufeatures-Z7EPC7NG.node";
   }
 });
 
-// node-file:D:\Code\node\deploy-files\node_modules\.pnpm\registry.npmmirror.com+cpu-features@0.0.4\node_modules\cpu-features\build\Release\cpufeatures.node
+// node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node
 var require_cpufeatures = __commonJS({
-  "node-file:D:\\Code\\node\\deploy-files\\node_modules\\.pnpm\\registry.npmmirror.com+cpu-features@0.0.4\\node_modules\\cpu-features\\build\\Release\\cpufeatures.node"(exports, module2) {
+  "node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/registry.npmmirror.com+cpu-features@0.0.4/node_modules/cpu-features/build/Release/cpufeatures.node"(exports, module2) {
     init_cpufeatures();
     try {
       module2.exports = require(cpufeatures_default);
@@ -6791,13 +6791,13 @@ var require_utils2 = __commonJS({
 var sshcrypto_default;
 var init_sshcrypto = __esm({
   "node_modules/.pnpm/ssh2@1.11.0/node_modules/ssh2/lib/protocol/crypto/build/Release/sshcrypto.node"() {
-    sshcrypto_default = "./sshcrypto-MROGEQ2W.node";
+    sshcrypto_default = "./sshcrypto-HMO4UJP5.node";
   }
 });
 
-// node-file:D:\Code\node\deploy-files\node_modules\.pnpm\ssh2@1.11.0\node_modules\ssh2\lib\protocol\crypto\build\Release\sshcrypto.node
+// node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/ssh2@1.11.0/node_modules/ssh2/lib/protocol/crypto/build/Release/sshcrypto.node
 var require_sshcrypto = __commonJS({
-  "node-file:D:\\Code\\node\\deploy-files\\node_modules\\.pnpm\\ssh2@1.11.0\\node_modules\\ssh2\\lib\\protocol\\crypto\\build\\Release\\sshcrypto.node"(exports, module2) {
+  "node-file:/Users/superman/Documents/TaoCode/github.com/STDSuperman/deploy-files/node_modules/.pnpm/ssh2@1.11.0/node_modules/ssh2/lib/protocol/crypto/build/Release/sshcrypto.node"(exports, module2) {
     init_sshcrypto();
     try {
       module2.exports = require(sshcrypto_default);
@@ -21453,7 +21453,7 @@ async function run() {
     await scpClient.waitForReady();
     if (preCommands?.length) {
       logger.log("start exec pre commands...");
-      await scpClient.exec(preCommands.join(" && "), serverCwd);
+      await Promise.all(preCommands.map((command) => scpClient.exec(command, serverCwd)));
       logger.log("pre command exec success!");
     }
     logger.log("start upload files...");
@@ -21461,7 +21461,7 @@ async function run() {
     logger.log("upload success!");
     if (postCommands?.length) {
       logger.log("start exec commands...");
-      await scpClient.exec(postCommands.join(" && "), serverCwd);
+      await Promise.all(postCommands.map((command) => scpClient.exec(command, serverCwd)));
       logger.log("command exec success!");
     }
     await scpClient.close();
